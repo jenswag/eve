@@ -1,4 +1,4 @@
-# Enhanced Vignes Extension (EVE): functions/models.py
+# Enhanced Vignes Equation (EVE): functions/models.py
 # Models
 # ---
 # Jens Wagner, 11.01.2026

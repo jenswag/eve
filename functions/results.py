@@ -1,4 +1,4 @@
-# Enhanced Vignes Extension (EVE): functions/results
+# Enhanced Vignes Equation (EVE): functions/results
 # Results
 # ---
 # Jens Wagner, 09.01.2026

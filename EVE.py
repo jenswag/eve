@@ -1,4 +1,4 @@
-# Enhanced Vignes Extension (EVE): EVE.py
+# Enhanced Vignes Equation (EVE): EVE.py
 # EVE Ensemble with HADES and HANNA
 # ---
 # Jens Wagner, 11.01.2026
@@ -15,7 +15,7 @@ v_j = 0.8932      # Viscosity j [mPas]
 T = 298.15  # Temperature [K]
 # ===
 
-# Run HADES
+# Run EVE
 data = {'SMILES_i': i,
         'SMILES_j': j,
         'vis_i': v_i,

@@ -1,4 +1,4 @@
-# Enhanced Vignes Extension (EVE): functions/parser.py
+# Enhanced Vignes Equation (EVE): functions/parser.py
 # Parser
 # ---
 # Jens Wagner, 11.01.2026

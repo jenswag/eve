@@ -1,4 +1,4 @@
-# Enhanced Vignes Extension (EVE): functions/driver.py
+# Enhanced Vignes Equation (EVE): functions/driver.py
 # Driver
 # ---
 # Jens Wagner, 11.01.2026
@@ -144,7 +144,7 @@ def drive(data):
         lines = "\n".join(warns)
         block = f"\nWarning!\n--------\n{lines}\n"
 
-    txt = f'''EVE - Enhanced Vignes Extension (with HADES and HANNA)
+    txt = f'''EVE - Enhanced Vignes Equation (with HADES and HANNA)
 -------------------------
     
 Input

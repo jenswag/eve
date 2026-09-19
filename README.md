@@ -4,7 +4,7 @@
 
 ![EVE](images/TOC.png)
 
-This repository contains the implementation of the Enhanced Vignes Extension (EVE) model in combination with [HADES] and [HANNA] for predicting concentration-dependent mutual diffusion coefficients in binary mixtures.
+This repository contains the implementation of the Enhanced Vignes Equation (EVE) model in combination with [HADES] and [HANNA] for predicting concentration-dependent mutual diffusion coefficients in binary mixtures.
 Details are provided in the associated [paper].
 
 ---
