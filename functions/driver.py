@@ -33,8 +33,7 @@ def drive(data):
     # HADES Ensemble
     x = np.linspace(0, 1, 100)
     xs = torch.from_numpy(np.hstack((np.expand_dims(x, -1), np.expand_dims(1 - x, -1)))).float()
-    x = torch.Tensor([[0., 1.]])
-    X = torch.Tensor(X).unsqueeze(0)
+    X = torch.Tensor(X).unsqueeze(0).repeat(100, 1, 1)
 
     b_i = []
     b_j = []
@@ -44,8 +43,8 @@ def drive(data):
         m.eval()
 
         with torch.no_grad():
-            pred_i, _ = m(X, x)
-            pred_j, _ = m(X.flip(1), x)
+            pred_i, _ = m(X, xs)
+            pred_j, _ = m(X.flip(1), xs.flip(-1))
             b_i.append(pred_i.squeeze())
             b_j.append(pred_j.squeeze())
 
@@ -102,8 +101,6 @@ def drive(data):
         tcfs_jj.append(tcf_jj.item())
 
     # EVE Ensemble
-    xs = torch.from_numpy(np.hstack((np.expand_dims(x, -1), np.expand_dims(1 - x, -1)))).float()
-    X = torch.Tensor(X).repeat(100, 1, 1)
     dI = torch.stack([torch.tensor(i) for i in [lngi, dlngi_dxj, tcfs_ii, (xs[:, 1] * torch.Tensor(dlngi_dxj)).tolist(),
                                                 [D_i[0]] * 100]], dim=1).type(torch.float)
     dJ = torch.stack([torch.tensor(i) for i in [lngj, dlngj_dxi, tcfs_jj, (xs[:, 0] * torch.Tensor(dlngj_dxi)).tolist(),
@@ -122,7 +119,7 @@ def drive(data):
     # VE
     D_VE_ij = []
     for x_i in x:
-        D_VE_ij.append(VE(np.array([D_i[0], D_j[-1]]), np.array([x_i, 1 - x_i])))
+        D_VE_ij.append(VE(np.array([D_j[-1], D_i[0]]), np.array([x_i, 1 - x_i])))
 
     data['x_i'] = x
     data['D_i'] = D_i
