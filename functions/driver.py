@@ -28,12 +28,21 @@ def drive(data):
     warnings.filterwarnings('ignore', category=InconsistentVersionWarning)  # Mute sklearn warning
     logging.set_verbosity_error()   # Mute ChemBERTa warning
 
+    x_in = data.pop('x', None)
     data, X, warns = parse(data)
 
-    # HADES Ensemble
-    x = np.linspace(0, 1, 100)
+    x = np.linspace(0, 1, 100) if x_in is None else np.asarray(x_in, dtype=float).ravel()
+    if (x < 0).any() or (x > 1).any():
+        raise ValueError('x must be in [0, 1].')
+    n = len(x)
     xs = torch.from_numpy(np.hstack((np.expand_dims(x, -1), np.expand_dims(1 - x, -1)))).float()
-    X = torch.Tensor(X).unsqueeze(0).repeat(100, 1, 1)
+    X = torch.Tensor(X).unsqueeze(0)
+
+    # HADES Ensemble (incl. x_i = 0 and 1 for infinite dilution values)
+    x_h = np.concatenate(([0.], x, [1.]))
+    xs_h = torch.from_numpy(np.hstack((np.expand_dims(x_h, -1), np.expand_dims(1 - x_h, -1)))).float()
+    X_h = X.repeat(len(x_h), 1, 1)
+    X = X.repeat(n, 1, 1)
 
     b_i = []
     b_j = []
@@ -43,16 +52,18 @@ def drive(data):
         m.eval()
 
         with torch.no_grad():
-            pred_i, _ = m(X, xs)
-            pred_j, _ = m(X.flip(1), xs.flip(-1))
+            pred_i, _ = m(X_h, xs_h)
+            pred_j, _ = m(X_h.flip(1), xs_h.flip(-1))
             b_i.append(pred_i.squeeze())
             b_j.append(pred_j.squeeze())
 
-    v_ideal = IV([data['vis_i'], data['vis_j']], xs)
+    v_ideal = IV([data['vis_i'], data['vis_j']], xs_h)
     D_i = np.mean([x.detach().numpy() for x in b_i], 0) * SE(data['M_i'] * 1e-3, v_ideal * 1e-3, data['T_m']) * 1e9
     std_i = np.std([x.detach().numpy() for x in b_i], 0) * SE(data['M_i'] * 1e-3, v_ideal * 1e-3, data['T_m']) * 1e9
     D_j = np.mean([x.detach().numpy() for x in b_j], 0) * SE(data['M_j'] * 1e-3, v_ideal * 1e-3, data['T_m']) * 1e9
     std_j = np.std([x.detach().numpy() for x in b_j], 0) * SE(data['M_j'] * 1e-3, v_ideal * 1e-3, data['T_m']) * 1e9
+    D_i_inf, D_j_inf = D_i[0], D_j[-1]
+    D_i, std_i, D_j, std_j = D_i[1:-1], std_i[1:-1], D_j[1:-1], std_j[1:-1]
 
     # HANNA Ensemble
     model_paths = [f'HANNA/HANNA_Production10_seed{seed}_Final.pt' for seed in range(42, 52)]
@@ -66,8 +77,6 @@ def drive(data):
                            nodes=hidden_size, device=device)
     model.eval()
     ChemBERTA, tokenizer = initiliaze_ChemBERTA(model_name="DeepChem/ChemBERTa-77M-MTR", device=None)
-
-    x = np.linspace(0, 1, 100)
 
     lngi = []
     lngj = []
@@ -102,9 +111,9 @@ def drive(data):
 
     # EVE Ensemble
     dI = torch.stack([torch.tensor(i) for i in [lngi, dlngi_dxj, tcfs_ii, (xs[:, 1] * torch.Tensor(dlngi_dxj)).tolist(),
-                                                [D_i[0]] * 100]], dim=1).type(torch.float)
+                                                [D_i_inf] * n]], dim=1).type(torch.float)
     dJ = torch.stack([torch.tensor(i) for i in [lngj, dlngj_dxi, tcfs_jj, (xs[:, 0] * torch.Tensor(dlngj_dxi)).tolist(),
-                                                [D_j[-1]] * 100]], dim=1).type(torch.float)
+                                                [D_j_inf] * n]], dim=1).type(torch.float)
 
     pred = []
     for p in glob.glob('params/EVE/EVE_*.pt'):
@@ -119,7 +128,7 @@ def drive(data):
     # VE
     D_VE_ij = []
     for x_i in x:
-        D_VE_ij.append(VE(np.array([D_j[-1], D_i[0]]), np.array([x_i, 1 - x_i])))
+        D_VE_ij.append(VE(np.array([D_j_inf, D_i_inf]), np.array([x_i, 1 - x_i])))
 
     data['x_i'] = x
     data['D_i'] = D_i
@@ -134,7 +143,7 @@ def drive(data):
     # Results
     path = '{}_{}_{}K'.format(data['SMILES_i'], data['SMILES_j'], str(data['T_m']))
     os.makedirs('RESULTS/{}'.format(path), exist_ok=True)
-    plot(data, path)
+    plot(data, path, scatter=x_in is not None)
 
     block = ''
     if warns:

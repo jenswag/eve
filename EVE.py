@@ -13,6 +13,8 @@ j = 'C1CCCCC1'   # SMILES j
 v_i = 0.307       # Viscosity i [mPas]
 v_j = 0.8932      # Viscosity j [mPas]
 T = 298.15  # Temperature [K]
+x = None    # Mole fractions x_i (list); None = default grid
+
 # ===
 
 # Run EVE
@@ -21,6 +23,7 @@ data = {'SMILES_i': i,
         'vis_i': v_i,
         'vis_j': v_j,
         'T_m': T,
+        'x': x,
         }
 
 drive(data)

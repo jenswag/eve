@@ -11,7 +11,7 @@ import pandas as pd
 
 
 # Plot
-def plot(data, path):
+def plot(data, path, scatter=False):
 
     plt.rcParams.update({'font.size': 8, 'font.family': 'Arial'})
 
@@ -25,26 +25,27 @@ def plot(data, path):
     ax.set_xlim([0, 1])
 
     xs = np.hstack((np.expand_dims(data['x_i'], -1), np.expand_dims(1 - data['x_i'], -1)))
+    draw = ax.scatter if scatter else ax.plot
 
     #ax.plot(xs[:, 0], data['D_VE_ij'], c='steelblue', linestyle='--', label='$D_i$')
-    ax.plot(xs[:, 0], data['D_i'], c='limegreen', label='$D_i$')
+    draw(xs[:, 0], data['D_i'], c='limegreen', label='$D_i$')
     # ax.fill_between(xs[:, 0], data['D_i'] - data['std_i'], data['D_i'] + data['std_i'], color='limegreen', alpha=0.3)
     # ax.fill_between(xs[:, 0], data['D_i'] - 2 * data['std_i'], data['D_i'] + 2 * data['std_i'], color='limegreen',
     #                alpha=0.15)
 
-    ax.plot(xs[:, 0], data['D_j'], c='forestgreen', label='$D_j$')
+    draw(xs[:, 0], data['D_j'], c='forestgreen', label='$D_j$')
     # ax.fill_between(xs[:, 0], data['D_j'] - data['std_j'], data['D_j'] + data['std_j'], color='forestgreen', alpha=0.3)
     # ax.fill_between(xs[:, 0], data['D_j'] - 2 * data['std_j'], data['D_j'] + 2 * data['std_j'], color='forestgreen',
     #                alpha=0.15)
 
 
-    ax.plot(xs[:, 0], data['D_MS_ij'], c='dodgerblue', label='$Đ_{ij}$')
+    draw(xs[:, 0], data['D_MS_ij'], c='dodgerblue', label='$Đ_{ij}$')
     # ax.fill_between(xs[:, 0], data['D_MS_ij'] - data['std_MS_ij'], data['D_MS_ij'] + data['std_MS_ij'],
     #                 color='dodgerblue', alpha=0.3)
     # ax.fill_between(xs[:, 0], data['D_MS_ij'] - 2 * data['std_MS_ij'], data['D_MS_ij'] + 2 * data['std_MS_ij'],
     #                 color='dodgerblue', alpha=0.15)
 
-    ax.plot(xs[:, 0], data['D_MS_ij'] * data['TCF'], c='steelblue', label='$D_{ij}$')
+    draw(xs[:, 0], data['D_MS_ij'] * data['TCF'], c='steelblue', label='$D_{ij}$')
     # ax.fill_between(xs[:, 0], (data['D_MS_ij'] - data['std_MS_ij']) * data['TCF'],
     #                 (data['D_MS_ij'] + data['std_MS_ij']) * data['TCF'],
     #                 color='steelblue', alpha=0.3)
