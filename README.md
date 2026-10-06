@@ -117,12 +117,14 @@ If you use the EVE model in scientific research, please cite the following paper
   year = {2026}
 }
 
-@misc{Wagner2026ESE,
-  doi = {10.48550/ARXIV.2603.02761},
-  url = {https://arxiv.org/abs/2603.02761},
-  author = {Wagner, Jens and Romero, Zeno and M\"{u}nnemann, Kerstin and Schmitt, Sebastian and Specht, Thomas and Hasse, Hans and Jirasek, Fabian},
-  title = {Hybrid Machine Learning for Enhanced Prediction of Diffusion Coefficients in Liquids},
-  publisher = {arXiv},
+@article{Wagner2026ESE,
+  title = {Hybrid machine learning for enhanced prediction of diffusion coefficients in liquids},
+  ISSN = {1463-9084},
+  url = {http://dx.doi.org/10.1039/d6cp00793g},
+  DOI = {10.1039/d6cp00793g},
+  journal = {Physical Chemistry Chemical Physics},
+  publisher = {Royal Society of Chemistry (RSC)},
+  author = {Wagner,  Jens and Romero,  Zeno and Münnemann,  Kerstin and Schmitt,  Sebastian and Specht,  Thomas and Hasse,  Hans and Jirasek,  Fabian},
   year = {2026}
 }
 
