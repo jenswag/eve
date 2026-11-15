@@ -20,7 +20,7 @@ def plot(data, path, scatter=False):
     ax.tick_params(direction='in', top=True, right=True)
     ax.set_title('{} ($i$) and {} ($j$) at {} K'.format(data['SMILES_i'], data['SMILES_j'], str(data['T_m'])),
                   loc='center')
-    ax.set_ylabel(r'$D_{ij}$, $Đ_{ij}$ ${\cdot}$ $10^{9}$ / m$^2$ s$^{-1}$')
+    ax.set_ylabel(r'$D$, $Đ$ ${\cdot}$ $10^{9}$ / m$^2$ s$^{-1}$')
     ax.set_xlabel('$x_i$ / mol mol$^{-1}$')
     ax.set_xlim([0, 1])
 

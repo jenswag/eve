@@ -107,6 +107,16 @@ If you use the EVE model in scientific research, please cite the following paper
 
 ```bibtex
 ...
+@misc{Wagner2026EVE,
+  doi = {10.48550/ARXIV.2611.15235},
+  url = {https://arxiv.org/abs/2611.15235},
+  author = {Wagner,  Jens and Specht,  Thomas and Hasse,  Hans and Jirasek,  Fabian},
+  keywords = {Chemical Physics (physics.chem-ph),  FOS: Physical sciences},
+  title = {Hybrid Machine Learning for Physically Consistent Prediction of Mutual Diffusion Coefficients in Binary Liquid Mixtures},
+  publisher = {arXiv},
+  year = {2026},
+  copyright = {Creative Commons Attribution 4.0 International}
+}
 
 @misc{Wagner2026HADES,
   doi = {10.48550/ARXIV.2609.24599},
@@ -125,7 +135,9 @@ If you use the EVE model in scientific research, please cite the following paper
   journal = {Physical Chemistry Chemical Physics},
   publisher = {Royal Society of Chemistry (RSC)},
   author = {Wagner,  Jens and Romero,  Zeno and Münnemann,  Kerstin and Schmitt,  Sebastian and Specht,  Thomas and Hasse,  Hans and Jirasek,  Fabian},
-  year = {2026}
+  year = {2026},
+  volume = {8},
+  pages = {25407--25416}
 }
 
 @article{Specht2024HANNA,
